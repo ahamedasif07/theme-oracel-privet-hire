@@ -64,6 +64,14 @@ function oracle_theme_assets()
         ORACLE_THEME_VERSION,
         true
     );
+    // Site interactions booking.
+    wp_enqueue_script(
+        'oracle-booking',
+        get_template_directory_uri() . '/assets/js/booking.js',
+        [],
+        ORACLE_THEME_VERSION,
+        true
+    );
 }
 add_action('wp_enqueue_scripts', 'oracle_theme_assets');
 
