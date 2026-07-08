@@ -6,49 +6,27 @@ document.addEventListener("DOMContentLoaded", function () {
   function onScroll() {
     if (!header) return;
     if (window.scrollY > 24) {
-      header.classList.add("bg-ink/85", "backdrop-blur-xl", "border-b", "border-white/5", "shadow-elegant");
+      header.classList.add(
+        "bg-ink/85",
+        "backdrop-blur-xl",
+        "border-b",
+        "border-white/5",
+        "shadow-elegant",
+      );
       header.classList.remove("bg-transparent");
     } else {
-      header.classList.remove("bg-ink/85", "backdrop-blur-xl", "border-b", "border-white/5", "shadow-elegant");
+      header.classList.remove(
+        "bg-ink/85",
+        "backdrop-blur-xl",
+        "border-b",
+        "border-white/5",
+        "shadow-elegant",
+      );
       header.classList.add("bg-transparent");
     }
   }
   onScroll();
   window.addEventListener("scroll", onScroll, { passive: true });
-
-  /* Mobile menu toggle */
-  var menuBtn = document.getElementById("menu-toggle");
-  var drawer = document.getElementById("mobile-drawer");
-  var menuIconOpen = document.getElementById("icon-menu");
-  var menuIconClose = document.getElementById("icon-close");
-
-  function closeDrawer() {
-    if (!drawer) return;
-    drawer.classList.remove("open");
-    drawer.classList.add("closed");
-    document.body.style.overflow = "";
-    if (menuIconOpen) menuIconOpen.classList.remove("hidden");
-    if (menuIconClose) menuIconClose.classList.add("hidden");
-  }
-
-  if (menuBtn && drawer) {
-    menuBtn.addEventListener("click", function () {
-      var isOpen = drawer.classList.contains("open");
-      if (isOpen) {
-        closeDrawer();
-      } else {
-        drawer.classList.add("open");
-        drawer.classList.remove("closed");
-        document.body.style.overflow = "hidden";
-        if (menuIconOpen) menuIconOpen.classList.add("hidden");
-        if (menuIconClose) menuIconClose.classList.remove("hidden");
-      }
-    });
-
-    document.querySelectorAll("#mobile-drawer a").forEach(function (link) {
-      link.addEventListener("click", closeDrawer);
-    });
-  }
 
   /* Footer year */
   var yearEl = document.getElementById("year");
@@ -109,7 +87,9 @@ document.addEventListener("DOMContentLoaded", function () {
         el.classList.toggle("bg-white/10", i >= currentStep);
       });
       if (backBtn) backBtn.disabled = currentStep === 0;
-      if (nextBtn) nextBtn.textContent = currentStep < steps.length - 1 ? "Continue" : "Confirm Booking";
+      if (nextBtn)
+        nextBtn.textContent =
+          currentStep < steps.length - 1 ? "Continue" : "Confirm Booking";
     }
 
     if (backBtn) {
