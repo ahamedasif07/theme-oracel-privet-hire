@@ -17,11 +17,12 @@ get_header();
 
   <div class="relative mx-auto flex min-h-screen max-w-7xl flex-col justify-center px-6 pt-32 pb-20 lg:px-10">
     <div class="animate-fade-up max-w-3xl">
-      <div class="flex items-center gap-3">
-        <span class="h-px w-10 bg-gold"></span>
-        <span class="text-xs uppercase tracking-[0.36em] text-gold">Executive Private Hire &middot; Est.
-          2011</span>
-      </div>
+      <!-- top title -->
+      <!-- <div class="flex items-center gap-3">
+                <span class="h-px w-10 bg-gold"></span>
+                <span class="text-xs uppercase tracking-[0.36em] text-gold">Executive Private Hire &middot; Est.
+                    2011</span>
+            </div> -->
       <h1 class="mt-6 font-display text-5xl leading-[1.02] md:text-7xl lg:text-[5.5rem]">
         A finer way to <span class="text-gradient-gold">arrive.</span>
       </h1>
@@ -123,7 +124,8 @@ get_header();
       <div class="absolute inset-0 bg-gradient-to-t from-ink/60 to-transparent"></div>
     </div>
     <div>
-      <div class="grid grid-cols-2 gap-8">
+      <!-- our stats of experience -->
+      <!-- <div class="grid grid-cols-2 gap-8">
         <div>
           <p class="font-display text-4xl text-gradient-gold">13+</p>
           <p class="mt-2 text-sm text-muted-foreground">Years in service</p>
@@ -140,7 +142,7 @@ get_header();
           <p class="font-display text-4xl text-gradient-gold">24/7</p>
           <p class="mt-2 text-sm text-muted-foreground">On the road</p>
         </div>
-      </div>
+      </div> -->
       <p class="mt-10 leading-relaxed text-muted-foreground">
         Every Oracle journey begins the same way: a courteous, uniformed
         driver, a spotless vehicle, complimentary refreshments and an
@@ -180,7 +182,6 @@ get_header();
       <?php
       $homeServices = [
         ['icon' => 'plane', 'title' => 'Airport Transfers', 'desc' => 'Meet & greet, flight tracking, fixed prices.'],
-        ['icon' => 'car', 'title' => 'Local Taxi Service', 'desc' => 'Everyday journeys with executive comfort.'],
         ['icon' => 'briefcase', 'title' => 'Corporate Travel', 'desc' => 'Discreet service for meetings & VIPs.'],
         ['icon' => 'pin', 'title' => 'Long Distance', 'desc' => 'Nationwide travel in total comfort.'],
         ['icon' => 'party', 'title' => 'Event Transport', 'desc' => 'Arrive on time, in style, together.'],
@@ -403,7 +404,7 @@ get_header();
           UK coverage, 24 hours a day.</p>
       </div>
       <div class="flex flex-col gap-3 sm:flex-row lg:justify-end">
-        <a href="tel:+441234567890"
+        <a href="tel:07456714214"
           class="inline-flex items-center justify-center gap-2 rounded-full btn-ghost-gold px-6 py-4">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
