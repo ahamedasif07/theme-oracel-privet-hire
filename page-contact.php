@@ -1,35 +1,37 @@
 <?php
-/*
-Template Name: Contact
-*/
+/* Template Name: Contact */
 global $pageTitle, $pageDescription, $canonical;
 $pageTitle = "Contact — Oracle Private Hire";
-$pageDescription = "Get in touch with Oracle Private Hire. 24/7 phone, email, WhatsApp and live chat. Nationwide UK chauffeur service.";
+$pageDescription = "Get in touch with Oracle Private Hire.";
 $canonical = "/contact.php";
 get_header();
 
-$inputCls = "w-full rounded-xl border border-white/10 bg-ink/60 px-4 py-3.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold transition-colors";
+$inputCls = "w-full rounded-xl border border-white/10 bg-ink/60 px-4 py-3.5 text-sm text-black placeholder:text-black focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold transition-colors";
 
 $contactSent = false;
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit']) && isset($_POST['oracle_contact_nonce']) && wp_verify_nonce($_POST['oracle_contact_nonce'], 'oracle_contact_form')) {
-  $name    = sanitize_text_field($_POST['name'] ?? '');
-  $phone   = sanitize_text_field($_POST['phone'] ?? '');
-  $email   = sanitize_email($_POST['email'] ?? '');
-  $subject = sanitize_text_field($_POST['subject'] ?? 'New contact form message');
-  $message = sanitize_textarea_field($_POST['message'] ?? '');
 
-  $to      = get_option('admin_email');
-  $body    = "New message from the website contact form:\n\n"
-    . "Name: {$name}\n"
-    . "Phone: {$phone}\n"
-    . "Email: {$email}\n\n"
-    . "Message:\n{$message}\n";
-  $headers = ['Content-Type: text/plain; charset=UTF-8'];
-  if ($email) {
-    $headers[] = 'Reply-To: ' . $email;
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit'])) {
+  if (wp_verify_nonce($_POST['oracle_contact_nonce'] ?? '', 'oracle_contact_form')) {
+
+    $name    = sanitize_text_field($_POST['name'] ?? '');
+    $phone   = sanitize_text_field($_POST['phone'] ?? '');
+    $email   = sanitize_email($_POST['email'] ?? '');
+    $subject = sanitize_text_field($_POST['subject'] ?? 'New Inquiry');
+    $message = sanitize_textarea_field($_POST['message'] ?? '');
+
+
+    wp_insert_post([
+      'post_title'   => 'Message from: ' . $name,
+      'post_content' => "Phone: $phone\nEmail: $email\n\nMessage:\n$message",
+      'post_status'  => 'publish',
+      'post_type'    => 'contact_message'
+    ]);
+
+
+    wp_mail(get_option('admin_email'), '[Contact Form] ' . $subject, "Name: $name\nPhone: $phone\nEmail: $email\nMessage: $message");
+
+    $contactSent = true;
   }
-
-  $contactSent = wp_mail($to, '[Contact Form] ' . $subject, $body, $headers);
 }
 ?>
 
@@ -93,32 +95,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit']) && 
         <p class="mt-3 text-muted-foreground">Thanks for reaching out — our team will reply shortly.</p>
       </div>
     <?php else: ?>
-      <form class="glass-card space-y-5 rounded-3xl p-8 md:p-10" method="post" action="">
+      <form class="glass-card space-y-5 rounded-3xl p-8 md:p-10" method="post"
+        action="<?php echo esc_url(get_permalink()); ?>">
         <div class="grid gap-5 md:grid-cols-2">
           <div>
             <label class="mb-2 block text-xs uppercase tracking-widest text-muted-foreground">Name</label>
-            <input name="name" class="<?php echo $inputCls; ?>" required>
+            <input name="name" class="<?php echo $inputCls; ?>" placeholder="Your name" required>
           </div>
           <div>
             <label class="mb-2 block text-xs uppercase tracking-widest text-muted-foreground">Phone</label>
-            <input type="tel" name="phone" class="<?php echo $inputCls; ?>" required>
+            <input type="tel" name="phone" class="<?php echo $inputCls; ?>" placeholder="Your phone number"
+              required>
           </div>
         </div>
         <div>
           <label class="mb-2 block text-xs uppercase tracking-widest text-muted-foreground">Email</label>
-          <input type="email" name="email" class="<?php echo $inputCls; ?>" required>
+          <input type="email" name="email" class="<?php echo $inputCls; ?>" placeholder="Your email address"
+            required>
         </div>
         <div>
           <label class="mb-2 block text-xs uppercase tracking-widest text-muted-foreground">Subject</label>
-          <input name="subject" class="<?php echo $inputCls; ?>">
+          <input name="subject" class="<?php echo $inputCls; ?>" placeholder="Subject">
         </div>
         <div>
           <label class="mb-2 block text-xs uppercase tracking-widest text-muted-foreground">Message</label>
-          <textarea name="message" rows="6" class="<?php echo $inputCls; ?>" required></textarea>
+          <textarea name="message" rows="6" class="<?php echo $inputCls; ?>" placeholder="Write your message"
+            required></textarea>
         </div>
         <?php wp_nonce_field('oracle_contact_form', 'oracle_contact_nonce'); ?>
         <input type="hidden" name="contact_submit" value="1">
-        <button type="submit" class="w-full rounded-full btn-gold px-8 py-4 text-sm">Send Message</button>
+        <div class="flex justify-center">
+          <button type="submit"
+            class="rounded-full flex justify-center w-full btn-gold px-8 py-4 text-center text-sm">Send
+            Message</button>
+        </div>
       </form>
     <?php endif; ?>
   </div>

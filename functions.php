@@ -86,3 +86,20 @@ function oracle_theme_editor_style()
     add_editor_style();
 }
 add_action('admin_init', 'oracle_theme_editor_style');
+
+
+// contact form post type 
+
+function register_contact_messages_cpt()
+{
+    register_post_type('contact_message', [
+        'labels' => ['name' => 'Contact Messages', 'singular_name' => 'Message'],
+        'public' => false,
+        'show_ui' => true,
+        'menu_icon' => 'dashicons-email-alt',
+        'supports' => ['title', 'editor', 'custom-fields'],
+        'capabilities' => ['create_posts' => 'do_not_allow'],
+        'map_meta_cap' => true,
+    ]);
+}
+add_action('init', 'register_contact_messages_cpt');
