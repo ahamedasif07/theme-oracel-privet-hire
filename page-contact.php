@@ -8,31 +8,7 @@ get_header();
 
 $inputCls = "w-full rounded-xl border border-white/10 bg-ink/60 px-4 py-3.5 text-sm text-black placeholder:text-black focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold transition-colors";
 
-$contactSent = false;
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit'])) {
-  if (wp_verify_nonce($_POST['oracle_contact_nonce'] ?? '', 'oracle_contact_form')) {
-
-    $name    = sanitize_text_field($_POST['name'] ?? '');
-    $phone   = sanitize_text_field($_POST['phone'] ?? '');
-    $email   = sanitize_email($_POST['email'] ?? '');
-    $subject = sanitize_text_field($_POST['subject'] ?? 'New Inquiry');
-    $message = sanitize_textarea_field($_POST['message'] ?? '');
-
-
-    wp_insert_post([
-      'post_title'   => 'Message from: ' . $name,
-      'post_content' => "Phone: $phone\nEmail: $email\n\nMessage:\n$message",
-      'post_status'  => 'publish',
-      'post_type'    => 'contact_message'
-    ]);
-
-
-    wp_mail(get_option('admin_email'), '[Contact Form] ' . $subject, "Name: $name\nPhone: $phone\nEmail: $email\nMessage: $message");
-
-    $contactSent = true;
-  }
-}
+$contactSent = isset($_GET['contact_sent']) && $_GET['contact_sent'] === '1';
 ?>
 
 <section class="relative flex min-h-[62vh] items-end overflow-hidden pt-32 pb-16">
@@ -83,20 +59,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit'])) {
       endforeach; ?>
     </div>
 
-    <?php if ($contactSent): ?>
-      <div class="glass-card rounded-3xl p-10 text-center">
-        <div class="mx-auto grid h-14 w-14 place-items-center rounded-full bg-gold text-ink">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20 6 9 17l-5-5" />
-          </svg>
-        </div>
-        <h2 class="mt-6 font-display text-2xl">Message sent.</h2>
-        <p class="mt-3 text-muted-foreground">Thanks for reaching out — our team will reply shortly.</p>
-      </div>
-    <?php else: ?>
-      <form class="glass-card space-y-5 rounded-3xl p-8 md:p-10" method="post"
-        action="<?php echo esc_url(get_permalink()); ?>">
+    <form class="glass-card space-y-5 rounded-3xl p-8 md:p-10" method="post"
+      action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
         <div class="grid gap-5 md:grid-cols-2">
           <div>
             <label class="mb-2 block text-xs uppercase tracking-widest text-muted-foreground">Name</label>
@@ -123,14 +87,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit'])) {
             required></textarea>
         </div>
         <?php wp_nonce_field('oracle_contact_form', 'oracle_contact_nonce'); ?>
-        <input type="hidden" name="contact_submit" value="1">
+        <input type="hidden" name="action" value="oracle_contact_submit">
         <div class="flex justify-center">
           <button type="submit"
-            class="rounded-full flex justify-center w-full btn-gold px-8 py-4 text-center text-sm">Send
+            class="rounded-full btn-gold px-8 py-4 text-center text-sm">Send
             Message</button>
         </div>
-      </form>
-    <?php endif; ?>
+    </form>
   </div>
 
   <div class="mt-16 overflow-hidden rounded-3xl border border-white/5">
@@ -140,5 +103,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit'])) {
     </iframe>
   </div>
 </section>
+
+<?php if ($contactSent): ?>
+  <div id="contact-success-popup" class="fixed inset-0 z-50 grid place-items-center bg-ink/80 px-6 backdrop-blur-sm">
+    <div class="glass-card max-w-md rounded-3xl p-8 text-center shadow-2xl">
+      <div class="mx-auto grid h-14 w-14 place-items-center rounded-full bg-gold text-ink">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 6 9 17l-5-5" />
+        </svg>
+      </div>
+      <h2 class="mt-6 font-display text-2xl text-foreground">Message sent.</h2>
+      <p class="mt-3 text-sm text-muted-foreground">Thank you. Your message has been saved and our team will reply shortly.</p>
+      <button type="button" class="mt-6 rounded-full btn-gold px-8 py-3 text-sm"
+        onclick="document.getElementById('contact-success-popup').remove();">Close</button>
+    </div>
+  </div>
+  <script>
+    window.setTimeout(function() {
+      var popup = document.getElementById('contact-success-popup');
+      if (popup) {
+        popup.remove();
+      }
+    }, 3000);
+  </script>
+<?php endif; ?>
 
 <?php get_footer(); ?>
