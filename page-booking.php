@@ -116,6 +116,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['final_submit']) && is
     <?php else: ?>
       <form id="booking-form" class="glass-card space-y-6 rounded-3xl p-8 md:p-12" method="post" action="">
 
+        <!-- Step 3: Details -->
+        <div class="booking-step grid gap-5 md:grid-cols-2">
+          <div>
+            <label class="mb-2 block text-xs uppercase tracking-[0.2em] text-muted-foreground">Full Name</label>
+            <input type="text" name="full_name" placeholder="Enter your name"
+              class="<?php echo $inputCls; ?> !text-black !bg-white placeholder:!text-muted-foreground"
+              required>
+          </div>
+          <div>
+            <label class="mb-2 block text-xs uppercase tracking-[0.2em] text-muted-foreground">Phone</label>
+            <input type="tel" name="phone" placeholder="Enter your phone"
+              class="<?php echo $inputCls; ?> !text-black !bg-white placeholder:!text-muted-foreground"
+              required>
+          </div>
+          <div class="md:col-span-2">
+            <label class="mb-2 block text-xs uppercase tracking-[0.2em] text-muted-foreground">Email</label>
+            <input type="email" name="email" placeholder="Enter your email"
+              class="<?php echo $inputCls; ?> !text-black !bg-white placeholder:!text-muted-foreground"
+              required>
+          </div>
+
+        </div>
+
         <!-- Step 1: Journey -->
         <div class="booking-step active grid gap-5 md:grid-cols-2">
           <div>
@@ -192,28 +215,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['final_submit']) && is
           </div>
         </div>
 
-        <!-- Step 3: Details -->
-        <div class="booking-step grid gap-5 md:grid-cols-2">
-          <div>
-            <label class="mb-2 block text-xs uppercase tracking-[0.2em] text-muted-foreground">Full Name</label>
-            <input type="text" name="full_name" placeholder="Enter your name"
-              class="<?php echo $inputCls; ?> !text-black !bg-white placeholder:!text-muted-foreground"
-              required>
-          </div>
-          <div>
-            <label class="mb-2 block text-xs uppercase tracking-[0.2em] text-muted-foreground">Phone</label>
-            <input type="tel" name="phone" placeholder="Enter your phone"
-              class="<?php echo $inputCls; ?> !text-black !bg-white placeholder:!text-muted-foreground"
-              required>
-          </div>
-          <div class="md:col-span-2">
-            <label class="mb-2 block text-xs uppercase tracking-[0.2em] text-muted-foreground">Email</label>
-            <input type="email" name="email" placeholder="Enter your email"
-              class="<?php echo $inputCls; ?> !text-black !bg-white placeholder:!text-muted-foreground"
-              required>
-          </div>
-
-        </div>
+        <!-- back and continue buttons -->
         <div class="flex flex-wrap items-center justify-between gap-3 pt-4">
           <button type="button" id="booking-back" disabled
             class="inline-flex items-center gap-2 rounded-full btn-ghost-gold px-6 py-3 text-sm disabled:opacity-40 disabled:cursor-not-allowed">
@@ -234,6 +236,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['final_submit']) && is
             </svg>
           </button>
         </div>
+
       </form>
     <?php endif; ?>
   </div>
