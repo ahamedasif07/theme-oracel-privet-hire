@@ -64,14 +64,6 @@ function oracle_theme_assets()
         ORACLE_THEME_VERSION,
         true
     );
-    // Site interactions booking.
-    wp_enqueue_script(
-        'oracle-booking',
-        get_template_directory_uri() . '/assets/js/booking.js',
-        [],
-        ORACLE_THEME_VERSION,
-        true
-    );
 }
 add_action('wp_enqueue_scripts', 'oracle_theme_assets');
 
@@ -169,298 +161,300 @@ function oracle_contact_messages_admin_modal()
         return;
     }
 ?>
-    <style>
-        .oracle-view-contact-message {
-            align-items: center;
-            background: linear-gradient(135deg, #111318, #2a2415);
-            border: 1px solid rgba(212, 175, 55, 0.48);
-            border-radius: 999px;
-            box-shadow: 0 10px 24px rgba(17, 19, 24, 0.16);
-            color: #f7dfa0;
-            cursor: pointer;
-            display: inline-flex;
-            font-size: 12px;
-            font-weight: 700;
-            justify-content: center;
-            letter-spacing: 0.04em;
-            line-height: 1;
-            min-height: 34px;
-            padding: 9px 18px;
-            text-transform: uppercase;
-            transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
-        }
+<style>
+.oracle-view-contact-message {
+    align-items: center;
+    background: linear-gradient(135deg, #111318, #2a2415);
+    border: 1px solid rgba(212, 175, 55, 0.48);
+    border-radius: 999px;
+    box-shadow: 0 10px 24px rgba(17, 19, 24, 0.16);
+    color: #f7dfa0;
+    cursor: pointer;
+    display: inline-flex;
+    font-size: 12px;
+    font-weight: 700;
+    justify-content: center;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    min-height: 34px;
+    padding: 9px 18px;
+    text-transform: uppercase;
+    transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+}
 
-        .oracle-view-contact-message:hover,
-        .oracle-view-contact-message:focus {
-            border-color: #d4af37;
-            box-shadow: 0 14px 32px rgba(17, 19, 24, 0.24);
-            color: #fff4cf;
-            transform: translateY(-1px);
-        }
+.oracle-view-contact-message:hover,
+.oracle-view-contact-message:focus {
+    border-color: #d4af37;
+    box-shadow: 0 14px 32px rgba(17, 19, 24, 0.24);
+    color: #fff4cf;
+    transform: translateY(-1px);
+}
 
-        .oracle-contact-modal {
-            align-items: center;
-            background: rgba(8, 10, 14, 0.72);
-            backdrop-filter: blur(8px);
-            display: none;
-            inset: 0;
-            justify-content: center;
-            padding: 24px;
-            position: fixed;
-            z-index: 100000;
-        }
+.oracle-contact-modal {
+    align-items: center;
+    background: rgba(8, 10, 14, 0.72);
+    backdrop-filter: blur(8px);
+    display: none;
+    inset: 0;
+    justify-content: center;
+    padding: 24px;
+    position: fixed;
+    z-index: 100000;
+}
 
-        .oracle-contact-modal.is-open {
-            display: flex;
-        }
+.oracle-contact-modal.is-open {
+    display: flex;
+}
 
-        .oracle-contact-modal__panel {
-            background: linear-gradient(180deg, #ffffff 0%, #fbfaf6 100%);
-            border: 1px solid rgba(212, 175, 55, 0.26);
-            border-radius: 20px;
-            box-shadow: 0 34px 90px rgba(0, 0, 0, 0.34);
-            max-height: calc(100vh - 48px);
-            max-width: 720px;
-            overflow: auto;
-            padding: 0;
-            position: relative;
-            width: min(100%, 720px);
-        }
+.oracle-contact-modal__panel {
+    background: linear-gradient(180deg, #ffffff 0%, #fbfaf6 100%);
+    border: 1px solid rgba(212, 175, 55, 0.26);
+    border-radius: 20px;
+    box-shadow: 0 34px 90px rgba(0, 0, 0, 0.34);
+    max-height: calc(100vh - 48px);
+    max-width: 720px;
+    overflow: auto;
+    padding: 0;
+    position: relative;
+    width: min(100%, 720px);
+}
 
-        .oracle-contact-modal__close {
-            background: #fff;
-            border: 1px solid rgba(17, 19, 24, 0.12);
-            border-radius: 999px;
-            box-shadow: 0 8px 18px rgba(17, 19, 24, 0.08);
-            color: #1d2327;
-            cursor: pointer;
-            font-weight: 700;
-            min-height: 34px;
-            padding: 6px 14px;
-            position: absolute;
-            right: 22px;
-            top: 22px;
-        }
+.oracle-contact-modal__close {
+    background: #fff;
+    border: 1px solid rgba(17, 19, 24, 0.12);
+    border-radius: 999px;
+    box-shadow: 0 8px 18px rgba(17, 19, 24, 0.08);
+    color: #1d2327;
+    cursor: pointer;
+    font-weight: 700;
+    min-height: 34px;
+    padding: 6px 14px;
+    position: absolute;
+    right: 22px;
+    top: 22px;
+}
 
-        .oracle-contact-modal__header {
-            background: radial-gradient(circle at top left, rgba(212, 175, 55, 0.24), transparent 34%), linear-gradient(135deg, #111318, #221d13);
-            color: #fff;
-            padding: 30px 72px 28px 28px;
-        }
+.oracle-contact-modal__header {
+    background: radial-gradient(circle at top left, rgba(212, 175, 55, 0.24), transparent 34%), linear-gradient(135deg, #111318, #221d13);
+    color: #fff;
+    padding: 30px 72px 28px 28px;
+}
 
-        .oracle-contact-modal__eyebrow {
-            color: #d4af37;
-            display: block;
-            font-size: 11px;
-            font-weight: 800;
-            letter-spacing: 0.16em;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
+.oracle-contact-modal__eyebrow {
+    color: #d4af37;
+    display: block;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
 
-        .oracle-contact-modal__title {
-            color: #fff;
-            font-size: 26px;
-            line-height: 1.18;
-            margin: 0;
-        }
+.oracle-contact-modal__title {
+    color: #fff;
+    font-size: 26px;
+    line-height: 1.18;
+    margin: 0;
+}
 
-        .oracle-contact-modal__subtext {
-            color: rgba(255, 255, 255, 0.68);
-            margin: 8px 0 0;
-        }
+.oracle-contact-modal__subtext {
+    color: rgba(255, 255, 255, 0.68);
+    margin: 8px 0 0;
+}
 
-        .oracle-contact-modal__grid {
-            display: grid;
-            gap: 16px;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            padding: 24px;
-        }
+.oracle-contact-modal__grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 24px;
+}
 
-        .oracle-contact-modal__field {
-            background: #fff;
-            border: 1px solid rgba(17, 19, 24, 0.08);
-            border-radius: 14px;
-            box-shadow: 0 10px 26px rgba(15, 23, 42, 0.06);
-            padding: 16px;
-        }
+.oracle-contact-modal__field {
+    background: #fff;
+    border: 1px solid rgba(17, 19, 24, 0.08);
+    border-radius: 14px;
+    box-shadow: 0 10px 26px rgba(15, 23, 42, 0.06);
+    padding: 16px;
+}
 
-        .oracle-contact-modal__field--full {
-            grid-column: 1 / -1;
-        }
+.oracle-contact-modal__field--full {
+    grid-column: 1 / -1;
+}
 
-        .oracle-contact-modal__label {
-            color: #8a6d1d;
-            display: block;
-            font-size: 11px;
-            font-weight: 800;
-            letter-spacing: 0.11em;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
+.oracle-contact-modal__label {
+    color: #8a6d1d;
+    display: block;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.11em;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
 
-        .oracle-contact-modal__value {
-            color: #171b21;
-            font-size: 15px;
-            font-weight: 600;
-            line-height: 1.55;
-            margin: 0;
-            overflow-wrap: anywhere;
-            white-space: pre-wrap;
-        }
+.oracle-contact-modal__value {
+    color: #171b21;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.55;
+    margin: 0;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+}
 
-        .oracle-contact-modal__field--full .oracle-contact-modal__value {
-            background: #fbfaf6;
-            border-left: 3px solid #d4af37;
-            border-radius: 10px;
-            font-weight: 500;
-            min-height: 110px;
-            padding: 14px;
-        }
+.oracle-contact-modal__field--full .oracle-contact-modal__value {
+    background: #fbfaf6;
+    border-left: 3px solid #d4af37;
+    border-radius: 10px;
+    font-weight: 500;
+    min-height: 110px;
+    padding: 14px;
+}
 
-        @media (max-width: 600px) {
-            .oracle-contact-modal {
-                padding: 12px;
-            }
+@media (max-width: 600px) {
+    .oracle-contact-modal {
+        padding: 12px;
+    }
 
-            .oracle-contact-modal__panel {
-                border-radius: 16px;
-            }
+    .oracle-contact-modal__panel {
+        border-radius: 16px;
+    }
 
-            .oracle-contact-modal__header {
-                padding: 26px 24px 22px;
-            }
+    .oracle-contact-modal__header {
+        padding: 26px 24px 22px;
+    }
 
-            .oracle-contact-modal__close {
-                position: static;
-                margin: 16px 0 0 24px;
-            }
+    .oracle-contact-modal__close {
+        position: static;
+        margin: 16px 0 0 24px;
+    }
 
-            .oracle-contact-modal__grid {
-                grid-template-columns: 1fr;
-                padding: 18px;
-            }
-        }
-    </style>
+    .oracle-contact-modal__grid {
+        grid-template-columns: 1fr;
+        padding: 18px;
+    }
+}
+</style>
 
-    <div class="oracle-contact-modal" id="oracle-contact-modal" aria-hidden="true">
-        <div class="oracle-contact-modal__panel" role="dialog" aria-modal="true" aria-labelledby="oracle-contact-modal-title">
-            <button type="button" class="oracle-contact-modal__close" id="oracle-contact-modal-close">Close</button>
-            <div class="oracle-contact-modal__header">
-                <span class="oracle-contact-modal__eyebrow">Oracle Private Hire</span>
-                <h2 class="oracle-contact-modal__title" id="oracle-contact-modal-title">Contact Message</h2>
-                <p class="oracle-contact-modal__subtext">Full customer enquiry details from the contact form.</p>
+<div class="oracle-contact-modal" id="oracle-contact-modal" aria-hidden="true">
+    <div class="oracle-contact-modal__panel" role="dialog" aria-modal="true"
+        aria-labelledby="oracle-contact-modal-title">
+        <button type="button" class="oracle-contact-modal__close" id="oracle-contact-modal-close">Close</button>
+        <div class="oracle-contact-modal__header">
+            <span class="oracle-contact-modal__eyebrow">Oracle Private Hire</span>
+            <h2 class="oracle-contact-modal__title" id="oracle-contact-modal-title">Contact Message</h2>
+            <p class="oracle-contact-modal__subtext">Full customer enquiry details from the contact form.</p>
+        </div>
+        <div class="oracle-contact-modal__grid">
+            <div class="oracle-contact-modal__field">
+                <span class="oracle-contact-modal__label">Name</span>
+                <p class="oracle-contact-modal__value" data-oracle-contact-value="name"></p>
             </div>
-            <div class="oracle-contact-modal__grid">
-                <div class="oracle-contact-modal__field">
-                    <span class="oracle-contact-modal__label">Name</span>
-                    <p class="oracle-contact-modal__value" data-oracle-contact-value="name"></p>
-                </div>
-                <div class="oracle-contact-modal__field">
-                    <span class="oracle-contact-modal__label">Phone</span>
-                    <p class="oracle-contact-modal__value" data-oracle-contact-value="phone"></p>
-                </div>
-                <div class="oracle-contact-modal__field">
-                    <span class="oracle-contact-modal__label">Email</span>
-                    <p class="oracle-contact-modal__value" data-oracle-contact-value="email"></p>
-                </div>
-                <div class="oracle-contact-modal__field">
-                    <span class="oracle-contact-modal__label">Subject</span>
-                    <p class="oracle-contact-modal__value" data-oracle-contact-value="subject"></p>
-                </div>
-                <div class="oracle-contact-modal__field oracle-contact-modal__field--full">
-                    <span class="oracle-contact-modal__label">Message</span>
-                    <p class="oracle-contact-modal__value" data-oracle-contact-value="message"></p>
-                </div>
+            <div class="oracle-contact-modal__field">
+                <span class="oracle-contact-modal__label">Phone</span>
+                <p class="oracle-contact-modal__value" data-oracle-contact-value="phone"></p>
+            </div>
+            <div class="oracle-contact-modal__field">
+                <span class="oracle-contact-modal__label">Email</span>
+                <p class="oracle-contact-modal__value" data-oracle-contact-value="email"></p>
+            </div>
+            <div class="oracle-contact-modal__field">
+                <span class="oracle-contact-modal__label">Subject</span>
+                <p class="oracle-contact-modal__value" data-oracle-contact-value="subject"></p>
+            </div>
+            <div class="oracle-contact-modal__field oracle-contact-modal__field--full">
+                <span class="oracle-contact-modal__label">Message</span>
+                <p class="oracle-contact-modal__value" data-oracle-contact-value="message"></p>
             </div>
         </div>
     </div>
+</div>
 
-    <script>
-        (function() {
-            var modal = document.getElementById('oracle-contact-modal');
-            var closeButton = document.getElementById('oracle-contact-modal-close');
+<script>
+(function() {
+    var modal = document.getElementById('oracle-contact-modal');
+    var closeButton = document.getElementById('oracle-contact-modal-close');
 
-            function setValue(key, value) {
-                var node = modal.querySelector('[data-oracle-contact-value="' + key + '"]');
-                if (node) {
-                    node.textContent = value || '-';
+    function setValue(key, value) {
+        var node = modal.querySelector('[data-oracle-contact-value="' + key + '"]');
+        if (node) {
+            node.textContent = value || '-';
+        }
+    }
+
+    function closeModal() {
+        modal.classList.remove('is-open');
+        modal.setAttribute('aria-hidden', 'true');
+    }
+
+    document.addEventListener('click', function(event) {
+        var button = event.target.closest('.oracle-view-contact-message');
+
+        if (!button) {
+            return;
+        }
+
+        setValue('name', button.dataset.name);
+        setValue('phone', button.dataset.phone);
+        setValue('email', button.dataset.email);
+        setValue('subject', button.dataset.subject);
+        setValue('message', button.dataset.message);
+
+        modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
+    });
+
+    closeButton.addEventListener('click', closeModal);
+    modal.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            closeModal();
+        }
+    });
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closeModal();
+        }
+    });
+
+    function refreshContactMessagesTable() {
+        if (document.hidden || modal.classList.contains('is-open')) {
+            return;
+        }
+
+        var refreshUrl = new URL(window.location.href);
+        refreshUrl.searchParams.set('oracle_contact_refresh', Date.now().toString());
+
+        fetch(refreshUrl.toString(), {
+                credentials: 'same-origin',
+                cache: 'no-store'
+            })
+            .then(function(response) {
+                return response.text();
+            })
+            .then(function(html) {
+                var doc = new DOMParser().parseFromString(html, 'text/html');
+                var nextBody = doc.querySelector('.wp-list-table tbody');
+                var currentBody = document.querySelector('.wp-list-table tbody');
+
+                if (nextBody && currentBody && nextBody.innerHTML !== currentBody.innerHTML) {
+                    currentBody.innerHTML = nextBody.innerHTML;
                 }
-            }
 
-            function closeModal() {
-                modal.classList.remove('is-open');
-                modal.setAttribute('aria-hidden', 'true');
-            }
+                ['.tablenav.top .displaying-num', '.tablenav.bottom .displaying-num', '.subsubsub'].forEach(
+                    function(selector) {
+                        var nextNode = doc.querySelector(selector);
+                        var currentNode = document.querySelector(selector);
 
-            document.addEventListener('click', function(event) {
-                var button = event.target.closest('.oracle-view-contact-message');
-
-                if (!button) {
-                    return;
-                }
-
-                setValue('name', button.dataset.name);
-                setValue('phone', button.dataset.phone);
-                setValue('email', button.dataset.email);
-                setValue('subject', button.dataset.subject);
-                setValue('message', button.dataset.message);
-
-                modal.classList.add('is-open');
-                modal.setAttribute('aria-hidden', 'false');
-            });
-
-            closeButton.addEventListener('click', closeModal);
-            modal.addEventListener('click', function(event) {
-                if (event.target === modal) {
-                    closeModal();
-                }
-            });
-            document.addEventListener('keydown', function(event) {
-                if (event.key === 'Escape') {
-                    closeModal();
-                }
-            });
-
-            function refreshContactMessagesTable() {
-                if (document.hidden || modal.classList.contains('is-open')) {
-                    return;
-                }
-
-                var refreshUrl = new URL(window.location.href);
-                refreshUrl.searchParams.set('oracle_contact_refresh', Date.now().toString());
-
-                fetch(refreshUrl.toString(), {
-                        credentials: 'same-origin',
-                        cache: 'no-store'
-                    })
-                    .then(function(response) {
-                        return response.text();
-                    })
-                    .then(function(html) {
-                        var doc = new DOMParser().parseFromString(html, 'text/html');
-                        var nextBody = doc.querySelector('.wp-list-table tbody');
-                        var currentBody = document.querySelector('.wp-list-table tbody');
-
-                        if (nextBody && currentBody && nextBody.innerHTML !== currentBody.innerHTML) {
-                            currentBody.innerHTML = nextBody.innerHTML;
+                        if (nextNode && currentNode && nextNode.innerHTML !== currentNode.innerHTML) {
+                            currentNode.innerHTML = nextNode.innerHTML;
                         }
+                    });
+            })
+            .catch(function() {});
+    }
 
-                        ['.tablenav.top .displaying-num', '.tablenav.bottom .displaying-num', '.subsubsub'].forEach(function(selector) {
-                            var nextNode = doc.querySelector(selector);
-                            var currentNode = document.querySelector(selector);
-
-                            if (nextNode && currentNode && nextNode.innerHTML !== currentNode.innerHTML) {
-                                currentNode.innerHTML = nextNode.innerHTML;
-                            }
-                        });
-                    })
-                    .catch(function() {});
-            }
-
-            window.setInterval(refreshContactMessagesTable, 4000);
-        })();
-    </script>
+    window.setInterval(refreshContactMessagesTable, 4000);
+})();
+</script>
 <?php
 }
 add_action('admin_footer-edit.php', 'oracle_contact_messages_admin_modal');
